@@ -52,8 +52,8 @@ def donwloadPlayByPlay_playoffs(saison: int):
               
     
 if __name__ == "__main__":
-    list=[2016, 2017, 2018, 2019, 2020]###############################
+    list=[2016, 2017, 2018, 2019, 2020]
     
-    for i in list:#####################################################
-        donwloadPlayByPlay_regularSeason(i)###########################
-        donwloadPlayByPlay_playoffs(i)###########################
+    for i in list:
+        donwloadPlayByPlay_regularSeason(i)
+        donwloadPlayByPlay_playoffs(i)
