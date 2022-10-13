@@ -19,8 +19,8 @@ def donwloadPlayByPlay_regularSeason(saison: int):
         
             if(data.status_code == 200):
                 #save data
-                os.makedirs(f"data/regular season/{saison}-{saison + 1}/", exist_ok = True)
-                with open(f"data/regular season/{saison}-{saison + 1}/{i}.txt", 'wb') as f:
+                os.makedirs(f"../data/regular season/{saison}-{saison + 1}/", exist_ok = True)
+                with open(f"../data/regular season/{saison}-{saison + 1}/{i}.txt", 'wb') as f:
                     f.write(data.content)
     
     except Exception as e:
@@ -42,8 +42,8 @@ def donwloadPlayByPlay_playoffs(saison: int):
         
             if(data.status_code == 200):        
                 #save data
-                os.makedirs(f"data/playoffs/{saison}-{saison + 1}/", exist_ok = True)
-                with open(f"data/playoffs/{saison}-{saison + 1}/{i}.txt", 'wb') as f:
+                os.makedirs(f"../data/playoffs/{saison}-{saison + 1}/", exist_ok = True)
+                with open(f"../data/playoffs/{saison}-{saison + 1}/{i}.txt", 'wb') as f:
                     f.write(data.content)
     
     except Exception as e:
