@@ -33,7 +33,7 @@ class PbPData():
         3) If neither is specified, a PbPData will be created with the self.data attribute being an empty list.
         :param download_data: A dictionary contatining information about the data you want to load. It MUST contain
         a 'saison' key with an integer value corresponding to the season of the games you want to get (for example
-        2016 for the season 2017-2017), and a 'play_off' key with a boolean value set to True if you want play-off
+        2016 for the season 2016-2017), and a 'play_off' key with a boolean value set to True if you want play-off
         fames and to False if you want regular games. You can add an optional key 'root_data_path' to specify
         where you store or want to store your data. If this key is not included, the default data path is "../data".
         :param data: specified data to be wrapped in a PdPData object.
