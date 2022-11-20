@@ -10,6 +10,13 @@ def calculate_seconds(my_string):
     separated_time = my_string.split(":")
     return int(separated_time[0])*60+int(separated_time[1])
 
+def get_distance_net(row):
+    '''
+    Given a row of the original dataframe, this function computes the distance between the shot and the net
+    '''
+    return ((89- row['X_Transformed'])**2+(0-row['Y_Coordinate'])**2)**(1/2)
+
+
 def transform_X(row):
     '''
     Given a row of the original data frame, this function transforms the coordinate X depending on the position of
@@ -425,7 +432,9 @@ def engineered_data_frame(data):
     # Transform Last Coordinates X to one side of the rink
     df['Last_X_Transformed'] = df.apply(transform_last_X, axis=1)
     # Get the distance between all pairs of events and preceding events
-    df['Distance'] = df.apply(get_distance, axis=1)
+    df['Distance_Last_Event'] = df.apply(get_distance, axis=1)
+    # Get the distance of current event to the net
+    df['Distance_Net'] = df.apply(get_distance_net, axis=1)
     # Creat a boolean column testing whether the last event type was a shot
     df['Rebond'] = df['Last_Event_Type'] == 'Shot'
     # Set the angles of the events
@@ -435,7 +444,7 @@ def engineered_data_frame(data):
     # Compute the angular difference between the angle of the present event and the angle of the last events (both shots).
     df['Delta_Angle'] = df['Angle'] - df['Last_Angle']
     # Compute the speed between an event and a last event
-    df['Speed'] = df['Distance'] / df['Time_Between_Events']
+    df['Speed'] = df['Distance_Last_Event'] / df['Time_Between_Events']
 
     return df
 
