@@ -2,3 +2,4 @@ data/
 .idea/
 notebooks/Test.ipynb
 .ipynb_checkpoints/
+notebooks/models/
