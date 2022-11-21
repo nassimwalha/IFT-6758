@@ -420,7 +420,6 @@ def engineered_data_frame(data):
                  'Last_Coordinate_Y': Last_Coordinate_Y, 'Powerplay_Since': Powerplay_Since,
                  'Friendly_Non_Goalies': Friendly_Non_Goalies, 'Opponent_Non_Goalies': Opponent_Non_Goalies}
     df = pd.DataFrame(data_game)
-    df["Powerplay_Since"] = df.Powerplay_Since.map(lambda x: f'{x//60:02d}:{x%60:02d}')
 
     #Adding Other features required for part 4 of milesone 2.
     # Convert Period times to number of seconds
