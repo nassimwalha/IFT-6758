@@ -118,3 +118,4 @@ Werkzeug==2.2.2
 widgetsnbextension==4.0.3
 wrapt==1.14.1
 wurlitzer==3.0.2
+xgboost==1.7.1
