@@ -21,23 +21,21 @@ from multiprocessing import Process
 
 import ift6758
 
-
 LOG_FILE = os.environ.get("FLASK_LOG", "flask.log")
-
 
 app = Flask(__name__)
 MODEL = None
 
-
-#Stores a mapping from (workspace, model, version) to filename (path) in the system
-#Supported models are exactly the models included here
-#If a model is included, but there is no file on the system for the corresponding path,
-#The model will be downloaded from comet
+# Stores a mapping from (workspace, model, version) to filename (path) in the system
+# Supported models are exactly the models included here
+# If a model is included, but there is no file on the system for the corresponding path,
+# The model will be downloaded from comet
 MODEL_TO_PATH = {"nassim-walha":
-    {"xgb-all": {"1.0.0": Path("models")/"xgb_all_features.json"},
-     "xgb-tuned-all": {"1.0.0" :Path("models")/"xgb_tuned_all_features.json"}}}
+                     {"xgb-all": {"1.0.0": Path("models") / "xgb_all_features.json"},
+                      "xgb-tuned-all": {"1.0.0": Path("models") / "xgb_tuned_all_features.json"}}}
 
-AVAILABLE_MODELS = [(i,j,k) for i in MODEL_TO_PATH for j in MODEL_TO_PATH[i] for k in MODEL_TO_PATH[i][j]]
+AVAILABLE_MODELS = [(i, j, k) for i in MODEL_TO_PATH for j in MODEL_TO_PATH[i] for k in MODEL_TO_PATH[i][j]]
+
 
 def load_model(model_dict):
     """
@@ -51,7 +49,7 @@ def load_model(model_dict):
     """
     workspace = model_dict["workspace"]
     model = model_dict["model"]
-    version = model_dict ["version"]
+    version = model_dict["version"]
     global MODEL
     # Check whether the model is available in the system
     if os.path.exists(MODEL_TO_PATH[workspace][model][version]):
@@ -94,6 +92,7 @@ def before_first_request():
     base_model_dict = {"workspace": "nassim-walha", "model": "xgb-all", "version": "1.0.0"}
     load_model(base_model_dict)
 
+
 @app.route("/logs", methods=["GET"])
 def logs():
     """Reads data from the log file and returns them as the response"""
@@ -127,13 +126,13 @@ def download_registry_model():
     json = request.get_json()
     app.logger.info("Recieved POST request on /download_registry_model.")
     app.logger.info(json)
-    #Check whether all information is available
+    # Check whether all information is available
     if "workspace" not in json or "model" not in json or "version" not in json:
         app.logger.info("Request body missing required information.")
         return jsonify("Missing model information in request body. Must include: workspace, model, and version."), 400
 
     # Check whether information corresponds to an available model
-    workspace = json ["workspace"]
+    workspace = json["workspace"]
     model = json["model"]
     version = json["version"]
     flag = False
@@ -144,9 +143,9 @@ def download_registry_model():
     if not flag:
         app.logger.info("Request body information doesn't correspond to a supported model.")
         response_string = "Request information doesn't correspond to a supported model.\n " \
-                          "List of supported supported models (workspace, model, version): "+str(AVAILABLE_MODELS)+"."
+                          "List of supported supported models (workspace, model, version): " + str(
+            AVAILABLE_MODELS) + "."
         return jsonify(response_string), 400
-
 
     response = load_model(json)
 
@@ -165,25 +164,29 @@ def predict():
     json = request.get_json()
     app.logger.info(json)
 
-    #First try block to check whether json request has the correct structure, if yes, it is getting parsed
+    # First try block to check whether json request has the correct structure, if yes, it is getting parsed
     try:
-        temp_dict = {column :[json[column] [key] for key in sorted(list(json[column].keys())) ] for column in json}
+        temp_dict = {column: [json[column][key] for key in sorted(list(json[column].keys()))] for column in json}
         X = pd.DataFrame(temp_dict)
-        if len(X.columns)!=32:
+        if len(X.columns) != 32:
             raise Exception("Input with a number of columns different than 32.")
     except:
         app.logger.exception("Exception happened during the parsing of input.")
-        response ="Invalid prediction input. Please send the result of DataFrame.to_json() applied to the " \
-                  "input data frame in your request. The data frame should have 32 columns."
+        response = "Invalid prediction input. Please send the result of DataFrame.to_json() applied to the " \
+                   "input data frame in your request. The data frame should have 32 columns."
         return jsonify(response), 400
 
-    #Second try block to perform the prediction.
+    # Second try block to perform the prediction.
     try:
         response = MODEL.predict_proba(X)[:, 1].tolist()
     except:
         app.logger.exception("Prediction error.")
         return jsonify("Prediction error. Probably caused by wrong input values."), 400
 
-
     app.logger.info(response)
     return jsonify(response)  # response must be json serializable!
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000,
+            debug=True)
