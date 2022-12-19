@@ -47,9 +47,9 @@ class GameClient:
             # 5) Calculate sums of expected goals and update self.df
             temp_df = df_downloaded_full.loc[df_new_events.index].join(prediction_df)
             new_xg = temp_df.groupby(by="Attacking_Team")["Goal_Probability"].sum()
-            self.home_sum_of_expected_goals += 1
-            self.away_sum_of_expected_goals += 1
-            self.df = pd.concat([self.df, df_downloaded.loc[df_new_events.index]])
+            self.home_sum_of_expected_goals += new_xg["home"]
+            self.away_sum_of_expected_goals += new_xg["away"]
+            self.df = pd.concat([self.df, df_downloaded.loc[df_new_events.index].join(prediction_df)])
 
     def download_game_data(self):
         """
@@ -99,4 +99,3 @@ class GameClient:
         df_all_features = df_all_features[df_all_features.Speed != np.inf]
         df_all_features.reset_index(inplace=True, drop=True)
         return df_all_features
-
