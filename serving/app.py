@@ -12,14 +12,10 @@ import os
 from pathlib import Path
 import logging
 from flask import Flask, jsonify, request, abort
-import sklearn
 import pandas as pd
-import joblib
 from comet_ml import API
 from xgboost import XGBClassifier
-from multiprocessing import Process
 
-import ift6758
 
 
 LOG_FILE = os.environ.get("FLASK_LOG", "flask.log")

@@ -8,9 +8,9 @@ import logging
 logger = logging.getLogger(__name__)
 #Initialisation
 if 'servingClient' not in  st.session_state:
-    st.session_state['servingClient'] = ServingClient(ip="0.0.0.0", port=1234)
+    st.session_state['servingClient'] = ServingClient(ip="serving", port=1234)
 if 'gameClient' not in st.session_state:
-    st.session_state['gameClient'] = GameClient("0000000000", ip="0.0.0.0", port=1234)
+    st.session_state['gameClient'] = GameClient("0000000000", ip="serving", port=1234)
 if 'current_game_id' not in st.session_state:
     st.session_state['current_game_id'] = ""
 
@@ -52,7 +52,7 @@ with st.container():
         form_valid = st.caption('')
         try:
             if gameId != st.session_state.current_game_id:
-                st.session_state.gameClient = GameClient(gameId, ip="0.0.0.0", port=1234)
+                st.session_state.gameClient = GameClient(gameId, ip="serving", port=1234)
                 st.session_state.current_game_id = gameId
             st.session_state.gameClient.ping_game()
         except Exception as e:
