@@ -8,7 +8,7 @@ services:
       dockerfile: "./Dockerfile.serving"
     image: "ift6758/serving:1.0.0"
     ports:
-      - "127.0.0.1:1234:1234"
+      - "1234:1234"
     environment:
       - "COMET_API_KEY=$COMET_API_KEY"
 
@@ -18,4 +18,4 @@ services:
       dockerfile: "./Dockerfile.streamlit"
     image: "ift6758/streamlit:1.0.0"
     ports:
-      - "127.0.0.1:8092:8092"
+      - "8092:8092"
