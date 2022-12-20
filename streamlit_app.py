@@ -3,7 +3,9 @@ from ift6758.client.game_client import GameClient
 import streamlit as st
 import pandas as pd
 import numpy as np
+import logging
 
+logger = logging.getLogger(__name__)
 #Initialisation
 if 'servingClient' not in  st.session_state:
     st.session_state['servingClient'] = ServingClient(ip="0.0.0.0", port=1234)
@@ -55,6 +57,8 @@ with st.container():
             st.session_state.gameClient.ping_game()
         except Exception as e:
             form_valid.caption(f'<p style="color:red;">{e}<p/>', unsafe_allow_html=True)
+            logger.exception("Exception happened during ping operation")
+
 
 with st.container():
     period = ""
